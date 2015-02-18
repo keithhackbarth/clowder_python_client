@@ -2,7 +2,7 @@ from distutils.core import setup
 
 version = '0.0.1'
 
-with open('README.markdown') as readme:
+with open('README.md') as readme:
     long_description = readme.read()
 
 setup(
