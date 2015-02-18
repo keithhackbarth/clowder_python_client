@@ -11,6 +11,7 @@ sudo pip install https://github.com/keithhackbarth/clowder_client/zipball/master
 ### How to test
 
 Basic example for tracking memory usage on server
+Create a python file memory_usage.py
 
 ```
 import clowder
@@ -20,6 +21,18 @@ clowder.ok({
    'name': 'Memory Utilization',
    'value': psutil.phymem_usage().percent
 })
+```
+
+Run the file and make sure it works
+
+```
+python memory_usage.py
+```
+
+Then create a cron job to run every 5 minutes
+
+```
+*/5 * * * * python memory_usage.py
 ```
 
 
