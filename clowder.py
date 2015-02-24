@@ -5,14 +5,16 @@ from requests_futures.sessions import FuturesSession
 
 ALLOWED_KEYS = ('url', 'value', 'status', 'frequency')
 
+api_key = None
+
 def _send(data):
 
     url = data.get('url', 'http://www.clowder.io/api')
 
     session = FuturesSession()
 
-    if 'publisher' not in data:
-        data['publisher'] = 1
+    if api_key is not None:
+        data['api_key'] = api_key
 
     if 'value' not in data:
         data['value'] = data['status']
