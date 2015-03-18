@@ -39,10 +39,11 @@ Then create a cron job to run every 5 minutes
 */5 * * * * python memory_usage.py
 ```
 
-### Optional Parameters
+### Parameters
 
 Passed as python dictionary
 
+- *name*: (string - REQUIRED) A unique name for the check. All checks with this name will be combined.
 - *url*: (string - optional) The url to send data to. Defaults to www.clowder.io
 - *value*: (float - optional) The value of the check (such as response time, queue length, rows processed, etc.)
 - *status*: (integer - optional) Whether our not the check is passing (1, 0, -1). If failing, an alert is send.
