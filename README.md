@@ -17,11 +17,15 @@ Create a python file memory_usage.py
 import clowder
 import psutil
 
+clowder.api_key = '29rTtCyrBfZvABBMMbne'
+
 clowder.ok({
    'name': 'Memory Utilization',
    'value': psutil.phymem_usage().percent
 })
 ```
+
+### How to use
 
 Run the file and make sure it works
 
@@ -35,5 +39,13 @@ Then create a cron job to run every 5 minutes
 */5 * * * * python memory_usage.py
 ```
 
+### Optional Parameters
 
+Passed as python dictionary
+
+- *url*: (string - optional) The url to send data to. Defaults to www.clowder.io
+- *value*: (float - optional) The value of the check (such as response time, queue length, rows processed, etc.)
+- *status*: (integer - optional) Whether our not the check is passing (1, 0, -1). If failing, an alert is send.
+- *frequency*: (integer - optional) Duration in minutes until next check. If time passes without check, alert sounds.
+- *alert*: (function - optional) A lamdba function that passes or fails based on *value*
 
