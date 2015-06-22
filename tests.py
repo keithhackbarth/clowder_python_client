@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import contextlib
 import datetime
 import unittest
 
@@ -16,6 +15,8 @@ class BaseClowderTestCase(unittest.TestCase):
         """Assert that the given send mock was called with the given key and
         value pair.
 
+        :param send_mock: A mock
+        :type send_mock: mock.MagicMock
         :param key: A key
         :type key: hashable
         :param value: The expected value
@@ -89,6 +90,29 @@ class TestOk(BaseClowderTestCase):
         clowder.ok({'value': "Invalid stuff"})
         send.assert_called_once()
         self.assert_send_contains_data(send, 'status', 1)
+
+
+class TestSend(BaseClowderTestCase):
+
+    def setUp(self):
+        super(TestSend, self).setUp()
+        self.fixture = {'value': 'hello', 'status': 1}
+
+    @mock.patch('requests_futures.sessions.FuturesSession.post')
+    def test_should_use_default_clowder_api_url(self, post):
+        clowder._send(self.fixture)
+        post.assert_called_once()
+        args = post.call_args[0]
+        url = args[0]
+        self.assertEqual(url, clowder.CLOWDER_API_URL)
+
+    @mock.patch('requests_futures.sessions.FuturesSession.post')
+    def test_should_contain_provided_data(self, post):
+        clowder._send(self.fixture)
+        post.assert_called_once()
+        kwargs = post.call_args[1]
+        self.assertIn('data', kwargs)
+        self.assertEqual(kwargs['data'], self.fixture)
 
 # clowder.ok({
 #    'name': 'CPU Percent',

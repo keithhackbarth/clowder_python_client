@@ -2,7 +2,7 @@
 # coding: utf-8
 import datetime
 
-from requests_futures.sessions import FuturesSession
+from requests_futures import sessions
 
 
 # The URL of the Clowder API
@@ -21,7 +21,7 @@ def _send(data):
     """
     url = data.get('url', CLOWDER_API_URL)
 
-    session = FuturesSession()
+    session = sessions.FuturesSession()
 
     if api_key is not None:
         data['api_key'] = api_key
