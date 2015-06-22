@@ -50,6 +50,7 @@ class TestValidateData(unittest.TestCase):
 
     def test_should_succeed_if_only_valid_keys_given(self):
         clowder._validate_data({
+            'name': 'my-test',
             'url': clowder.CLOWDER_API_URL,
             'value': 123,
             'status': 1,
@@ -61,15 +62,15 @@ class TestValidateData(unittest.TestCase):
             ValueError,
             "Invalid data keys 'herp, derp'",
             clowder._validate_data,
-            {'value': 'Hey', 'status': 1, 'herp': 123, 'derp': 456}
+            {'name': 'Hey', 'status': 1, 'herp': 123, 'derp': 456}
         )
 
     def test_should_raise_error_if_missing_keys(self):
         self.assertRaisesRegexp(
             ValueError,
-            "Missing keys 'status'",
+            "Missing keys 'name'",
             clowder._validate_data,
-            {'value': 'Hey!'}
+            {'value': 1}
         )
 
 
@@ -85,9 +86,9 @@ class TestFail(BaseClowderTestCase):
 
     @mock.patch('clowder._send')
     def test_should_send_value_provided_along(self, send):
-        clowder.fail({'value': 'Invalid stuff'})
+        clowder.fail({'name': 'Invalid stuff'})
         send.assert_called_once()
-        self.assert_send_contains_data(send, 'value', 'Invalid stuff')
+        self.assert_send_contains_data(send, 'name', 'Invalid stuff')
 
     @mock.patch('clowder._send')
     def test_should_send_status_of_negative_one(self, send):
@@ -103,7 +104,7 @@ class TestOk(BaseClowderTestCase):
             AttributeError,
             "Status should not be provided to ok",
             clowder.ok,
-            {'status': 'should fail'}
+            {'name': 'Test', 'status': 'should fail'}
         )
 
     @mock.patch('clowder._send')
@@ -123,7 +124,7 @@ class TestSend(BaseClowderTestCase):
 
     def setUp(self):
         super(TestSend, self).setUp()
-        self.fixture = {'value': 'hello', 'status': 1}
+        self.fixture = {'name': 'hello', 'status': 1}
 
     @mock.patch('requests_futures.sessions.FuturesSession.post')
     def test_should_use_default_clowder_api_url(self, post):
@@ -146,15 +147,15 @@ class TestSend(BaseClowderTestCase):
             ValueError,
             "Invalid data keys 'herp'",
             clowder._send,
-            {'status': 1, 'herp': 123}
+            {'name': 'Test', 'herp': 123}
         )
 
     def test_should_raise_error_if_missing_keys(self):
         self.assertRaisesRegexp(
             ValueError,
-            "Missing keys 'status'",
+            "Missing keys 'name'",
             clowder._send,
-            {'value': 'Hey!'}
+            {'value': 1}
         )
 
 # clowder.ok({

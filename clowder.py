@@ -8,9 +8,9 @@ from requests_futures import sessions
 # The URL of the Clowder API
 CLOWDER_API_URL = 'http://www.clowder.io/api'
 # Allowed keys for data given
-ALLOWED_KEYS = ('url', 'value', 'status', 'frequency')
+ALLOWED_KEYS = ('name', 'url', 'value', 'status', 'frequency')
 # Required keys for all posts
-REQUIRED_KEYS = ('status', )
+REQUIRED_KEYS = ('name', )
 
 api_key = None
 
@@ -53,7 +53,7 @@ def _send(data):
         data['api_key'] = api_key
 
     if 'value' not in data:
-        data['value'] = data['status']
+        data['value'] = data.get('status', 1)
 
     if 'frequency' in data:
         data['frequency'] = _clean_frequency(data['frequency'])
