@@ -9,8 +9,32 @@ from requests_futures import sessions
 CLOWDER_API_URL = 'http://www.clowder.io/api'
 # Allowed keys for data given
 ALLOWED_KEYS = ('url', 'value', 'status', 'frequency')
+# Required keys for all posts
+REQUIRED_KEYS = ('status', )
 
 api_key = None
+
+
+def _validate_data(data):
+    """Validates the given data and raises an error if any non-allowed keys are
+    provided.
+
+    :param data: Data to send to API
+    :type data: dict
+    """
+    data_keys = set(data.keys())
+    extra_keys = data_keys - set(ALLOWED_KEYS)
+    missing_keys = set(REQUIRED_KEYS) - data_keys
+
+    if extra_keys:
+        raise ValueError(
+            'Invalid data keys {!r}'.format(', '.join(extra_keys))
+        )
+
+    if missing_keys:
+        raise ValueError(
+            'Missing keys {!r}'.format(', '.join(missing_keys))
+        )
 
 
 def _send(data):
@@ -22,6 +46,8 @@ def _send(data):
     url = data.get('url', CLOWDER_API_URL)
 
     session = sessions.FuturesSession()
+
+    _validate_data(data)
 
     if api_key is not None:
         data['api_key'] = api_key

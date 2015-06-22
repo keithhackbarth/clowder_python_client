@@ -46,6 +46,33 @@ class TestCleanFrequency(unittest.TestCase):
         )
 
 
+class TestValidateData(unittest.TestCase):
+
+    def test_should_succeed_if_only_valid_keys_given(self):
+        clowder._validate_data({
+            'url': clowder.CLOWDER_API_URL,
+            'value': 123,
+            'status': 1,
+            'frequency': 1098123098
+        })
+
+    def test_should_raise_error_if_invalid_data_given(self):
+        self.assertRaisesRegexp(
+            ValueError,
+            "Invalid data keys 'herp, derp'",
+            clowder._validate_data,
+            {'value': 'Hey', 'status': 1, 'herp': 123, 'derp': 456}
+        )
+
+    def test_should_raise_error_if_missing_keys(self):
+        self.assertRaisesRegexp(
+            ValueError,
+            "Missing keys 'status'",
+            clowder._validate_data,
+            {'value': 'Hey!'}
+        )
+
+
 class TestFail(BaseClowderTestCase):
 
     def test_should_raise_error_if_status_given(self):
@@ -113,6 +140,22 @@ class TestSend(BaseClowderTestCase):
         kwargs = post.call_args[1]
         self.assertIn('data', kwargs)
         self.assertEqual(kwargs['data'], self.fixture)
+
+    def test_should_raise_error_if_invalid_data_given(self):
+        self.assertRaisesRegexp(
+            ValueError,
+            "Invalid data keys 'herp'",
+            clowder._send,
+            {'status': 1, 'herp': 123}
+        )
+
+    def test_should_raise_error_if_missing_keys(self):
+        self.assertRaisesRegexp(
+            ValueError,
+            "Missing keys 'status'",
+            clowder._send,
+            {'value': 'Hey!'}
+        )
 
 # clowder.ok({
 #    'name': 'CPU Percent',
