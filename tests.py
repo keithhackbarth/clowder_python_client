@@ -129,6 +129,37 @@ class TestDelete(BaseClowderTestCase):
         self.assert_send_contains_data(send, 'url', clowder.CLOWDER_DELETE_URL)
 
 
+class TestSubmit(BaseClowderTestCase):
+
+    def test_should_raise_error_if_alert_not_given(self):
+        self.assertRaisesRegexp(
+            ValueError,
+            "Alert required",
+            clowder.submit,
+            name='Hello',
+            value=123
+        )
+
+    def test_should_raise_error_if_value_not_given(self):
+        self.assertRaisesRegexp(
+            ValueError,
+            "Value required",
+            clowder.submit,
+            name='Test',
+            alert=lambda x: (x > 10)
+        )
+
+    @mock.patch('clowder.fail')
+    def test_should_call_fail_if_predicate_returns_true(self, fail):
+        clowder.submit(alert=lambda x: x > 10, value=15)
+        fail.assert_called_once()
+
+    @mock.patch('clowder.ok')
+    def test_should_call_ok_if_predicate_returns_false(self, ok):
+        clowder.submit(alert=lambda x: x > 10, value=10)
+        ok.assert_called_once()
+
+
 class TestSend(BaseClowderTestCase):
 
     def setUp(self):

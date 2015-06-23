@@ -107,6 +107,28 @@ def delete(name):
     _send(data)
 
 
+def submit(**kwargs):
+    """Shortcut that takes an alert to evaluate and makes the appropriate API
+    call based on the results.
+
+    :param kwargs: A list of keyword arguments
+    :type kwargs: dict
+    """
+    if 'alert' not in kwargs:
+        raise ValueError('Alert required')
+
+    if 'value' not in kwargs:
+        raise ValueError('Value required')
+
+    alert = kwargs.pop('alert')
+    value = kwargs['value']
+
+    if alert(value):
+        fail(kwargs)
+    else:
+        ok(kwargs)
+
+
 def _clean_frequency(frequency):
     """Converts a frequency value to an integer. Raises an error if an invalid
     type is given.
