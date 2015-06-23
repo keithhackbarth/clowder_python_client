@@ -120,6 +120,15 @@ class TestOk(BaseClowderTestCase):
         self.assert_send_contains_data(send, 'status', 1)
 
 
+class TestDelete(BaseClowderTestCase):
+
+    @mock.patch('clowder._send')
+    def test_should_use_correct_delete_url(self, send):
+        clowder.delete('test')
+        send.assert_called_once()
+        self.assert_send_contains_data(send, 'url', clowder.CLOWDER_DELETE_URL)
+
+
 class TestSend(BaseClowderTestCase):
 
     def setUp(self):

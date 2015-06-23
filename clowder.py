@@ -6,7 +6,9 @@ from requests_futures import sessions
 
 
 # The URL of the Clowder API
-CLOWDER_API_URL = 'http://www.clowder.io/api'
+CLOWDER_API_ROOT = 'http://www.clowder.io/'
+CLOWDER_API_URL = CLOWDER_API_ROOT + 'api'
+CLOWDER_DELETE_URL = CLOWDER_API_ROOT + 'delete'
 # Allowed keys for data given
 ALLOWED_KEYS = ('name', 'url', 'value', 'status', 'frequency')
 # Required keys for all posts
@@ -17,7 +19,7 @@ api_key = None
 
 def _validate_data(data):
     """Validates the given data and raises an error if any non-allowed keys are
-    provided.
+    provided or any required keys are missing.
 
     :param data: Data to send to API
     :type data: dict
@@ -58,7 +60,7 @@ def _send(data):
     if 'frequency' in data:
         data['frequency'] = _clean_frequency(data['frequency'])
 
-    session.post(url, data=data)
+    future = session.post(url, data=data)
 
 
 def ok(data):
@@ -85,6 +87,22 @@ def fail(data):
         raise AttributeError('Status should not be provided to fail')
     else:
         data['status'] = -1
+
+    _send(data)
+
+
+def delete(name):
+    """Delete the monitored service with the given name.
+
+    :param name: A service name
+    :type name: str or unicode
+    """
+    data = {
+        'url': CLOWDER_DELETE_URL,
+        'name': name
+    }
+
+    print data
 
     _send(data)
 
