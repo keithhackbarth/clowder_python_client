@@ -4,7 +4,7 @@ This is the python repository for the Clowder python client.
 
 ### How to install
 ```
-sudo pip install https://github.com/keithhackbarth/clowder_client/zipball/master
+sudo pip install clowder
 ```
 
 
