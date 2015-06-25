@@ -1,13 +1,21 @@
-from distutils.core import setup
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
 
 version = '0.1.0'
 
-with open('README.md') as readme:
+with open('README.md', 'r') as readme:
     long_description = readme.read()
 
 setup(
-    name = 'clowder',
-    version = version,
+    name='clowder',
+    version=version,
     description = 'Client for the Clowder monitoring server',
     long_description = long_description,
     author = 'Keith Hackbarth',
@@ -17,6 +25,10 @@ setup(
     py_modules = ['clowder'],
     download_url = 'https://github.com/keithhackbarth/clowder_client/archive/master.zip',
     platforms='Cross-platform',
+    packages=['clowder'],
+    include_package_data=True,
+    zip_safe=False,
+    keywords='clowder',
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
