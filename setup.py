@@ -8,7 +8,7 @@ except ImportError:
     from distutils.core import setup
 
 
-version = '0.1.1'
+version = '0.1.2'
 
 with open('README.md', 'r') as readme:
     long_description = readme.read()
