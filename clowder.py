@@ -102,8 +102,6 @@ def delete(name):
         'name': name
     }
 
-    print data
-
     _send(data)
 
 

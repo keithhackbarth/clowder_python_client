@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-version = '0.0.1'
+version = '0.1.0'
 
 with open('README.md') as readme:
     long_description = readme.read()
@@ -18,8 +18,9 @@ setup(
     download_url = 'https://github.com/keithhackbarth/clowder_client/archive/master.zip',
     platforms='Cross-platform',
     classifiers=[
-      'Programming Language :: Python',
-      'Programming Language :: Python :: 3'
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 2.7'
     ],
     install_requires = [
         'requests_futures',
