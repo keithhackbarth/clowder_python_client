@@ -25,7 +25,6 @@ setup(
     py_modules = ['clowder'],
     download_url = 'https://github.com/keithhackbarth/clowder_client/archive/master.zip',
     platforms='Cross-platform',
-    packages=['clowder'],
     include_package_data=True,
     zip_safe=False,
     keywords='clowder',
