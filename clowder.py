@@ -10,7 +10,7 @@ CLOWDER_API_ROOT = 'http://www.clowder.io/'
 CLOWDER_API_URL = CLOWDER_API_ROOT + 'api'
 CLOWDER_DELETE_URL = CLOWDER_API_ROOT + 'delete'
 # Allowed keys for data given
-ALLOWED_KEYS = ('name', 'url', 'value', 'status', 'frequency')
+ALLOWED_KEYS = ('url', 'value', 'status', 'frequency', 'public')
 # Required keys for all posts
 REQUIRED_KEYS = ('name', )
 
