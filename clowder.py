@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 # coding: utf-8
 import datetime
-
-from requests_futures import sessions
-
+import requests
 
 # The URL of the Clowder API
 CLOWDER_API_ROOT = 'http://www.clowder.io/'
 CLOWDER_API_URL = CLOWDER_API_ROOT + 'api'
 CLOWDER_DELETE_URL = CLOWDER_API_ROOT + 'delete'
 # Allowed keys for data given
-ALLOWED_KEYS = ('name', 'url', 'value', 'status', 'frequency', 'public', 'alert')
+ALLOWED_KEYS = ('name', 'url', 'value', 'status', 'frequency', 'public', 'alert', 'expire')
 # Required keys for all posts
 REQUIRED_KEYS = ('name', )
 
 api_key = None
 
+# We set an extremely same timeout because we don't care
+# about receiving a response
+TIMEOUT = 0.00000000001
 
 def _validate_data(data):
     """Validates the given data and raises an error if any non-allowed keys are
@@ -47,8 +48,6 @@ def _send(data):
     """
     url = data.get('url', CLOWDER_API_URL)
 
-    session = sessions.FuturesSession()
-
     _validate_data(data)
 
     if api_key is not None:
@@ -60,7 +59,10 @@ def _send(data):
     if 'frequency' in data:
         data['frequency'] = _clean_frequency(data['frequency'])
 
-    future = session.post(url, data=data)
+    try:
+        requests.post(url, data=data, timeout=TIMEOUT)
+    except requests.exceptions.ReadTimeout:
+        pass
 
 
 def ok(data):
