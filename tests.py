@@ -166,7 +166,7 @@ class TestSend(BaseClowderTestCase):
         super(TestSend, self).setUp()
         self.fixture = {'name': 'hello', 'status': 1}
 
-    @mock.patch('requests_futures.sessions.FuturesSession.post')
+    @mock.patch('requests.post')
     def test_should_use_default_clowder_api_url(self, post):
         clowder._send(self.fixture)
         post.assert_called_once()
@@ -174,7 +174,7 @@ class TestSend(BaseClowderTestCase):
         url = args[0]
         self.assertEqual(url, clowder.CLOWDER_API_URL)
 
-    @mock.patch('requests_futures.sessions.FuturesSession.post')
+    @mock.patch('requests.post')
     def test_should_contain_provided_data(self, post):
         clowder._send(self.fixture)
         post.assert_called_once()
