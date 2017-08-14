@@ -61,7 +61,7 @@ def _send(data):
 
     try:
         requests.post(url, data=data, timeout=TIMEOUT)
-    except requests.exceptions.ReadTimeout:
+    except requests.exceptions.Timeout:
         pass
 
 
