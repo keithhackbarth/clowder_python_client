@@ -16,7 +16,7 @@ api_key = None
 
 # We set an extremely same timeout because we don't care
 # about receiving a response
-TIMEOUT = 0.00000000001
+TIMEOUT = 0.1
 
 def _validate_data(data):
     """Validates the given data and raises an error if any non-allowed keys are
