@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import datetime
+import logging
 import requests
 
 # The URL of the Clowder API
@@ -16,7 +17,7 @@ api_key = None
 
 # We set an extremely same timeout because we don't care
 # about receiving a response
-TIMEOUT = 0.1
+TIMEOUT = 1.0
 
 def _validate_data(data):
     """Validates the given data and raises an error if any non-allowed keys are
@@ -60,9 +61,18 @@ def _send(data):
         data['frequency'] = _clean_frequency(data['frequency'])
 
     try:
-        requests.post(url, data=data, timeout=TIMEOUT)
-    except requests.exceptions.Timeout:
+        requests.post(url, data=data, timeout=TIMEOUT).text
+
+    # This confirms you that the request has reached server
+    # And that the request has been sent
+    # Because we don't care about the response, we set the timeout
+    # value to be low and ignore read exceptions
+    except requests.exceptions.ReadTimeout as err:
         pass
+
+    # Allow a wildcard expection for any other type of processing error
+    except requests.exceptions.RequestException as err:
+        logging.error('Clowder expection %s', err)
 
 
 def ok(data):
